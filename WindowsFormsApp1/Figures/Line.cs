@@ -13,8 +13,8 @@ namespace WindowsFormsApp1
         int end_y;
 
         public override string name => "Line";
-        public Line(int x, int y, int size_x, int size_y, Color color_fill, Color color_pen)
-    : base(x, y, size_x, size_y, color_fill, color_pen)
+        public Line(int x, int y, int size_x, int size_y)
+    : base(x, y, size_x, size_y)
         { }
 
         public override void SizeChange(int new_x, int new_y, int old_x, int old_y)
@@ -27,7 +27,7 @@ namespace WindowsFormsApp1
 
         public override void Draw(Graphics graphics)
         {
-            graphics.DrawLine(MainForm.pen,start_x,start_y,end_x,end_y);
+            graphics.DrawLine(pen,start_x,start_y,end_x,end_y);
         }
     }
 }

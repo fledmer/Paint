@@ -12,29 +12,29 @@ namespace WindowsFormsApp1
         static int old_x,old_y;
         static Figure objectOnMouse;
 
-        public static void MakeRectangle(int x, int y, Color fill, Color pen)
+        public static void MakeRectangle(int x, int y)
         {
             old_x = x;
             old_y = y;
-            Rectangle rectangle = new Rectangle(x,y,1,1,fill,pen);
+            Rectangle rectangle = new Rectangle(x,y,1,1);
             MainForm.listObject.Add(rectangle);
             objectOnMouse = MainForm.listObject[MainForm.listObject.Count - 1];
             MainForm.MouseMoveEvent += ObjectSizeChange;
         }
-        public static void MakeLine(int x, int y, Color fill, Color pen)
+        public static void MakeLine(int x, int y)
         {
             old_x = x;
             old_y = y;
-            Line line = new Line(x, y, 1, 1, fill, pen);
+            Line line = new Line(x, y, 1, 1);
             MainForm.listObject.Add(line);
             objectOnMouse = MainForm.listObject[MainForm.listObject.Count - 1];
             MainForm.MouseMoveEvent += ObjectSizeChange;
         }
-        public static void MakeEllipse(int x, int y,Color fill, Color pen)
+        public static void MakeEllipse(int x, int y)
         {
             old_x = x;
             old_y = y;
-            Ellipse elipse = new Ellipse(x, y, 1, 1, fill, pen);
+            Ellipse elipse = new Ellipse(x, y, 1, 1);
             MainForm.listObject.Add(elipse);
             objectOnMouse = MainForm.listObject[MainForm.listObject.Count - 1];
             MainForm.MouseMoveEvent += ObjectSizeChange;

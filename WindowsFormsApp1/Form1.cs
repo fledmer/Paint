@@ -12,8 +12,9 @@ namespace WindowsFormsApp1
 {
     public partial class MainForm : Form
     {
-        public static Pen pen = new Pen(Color.Black,1);
-        public static Brush brush = new SolidBrush(Color.DarkGray);
+        static public Color firstColor = Color.Black;
+        static public Color secondColor = Color.White;
+        static public int penSize = 1;
 
         Graphics graphics;
         Bitmap bitmap;
@@ -21,7 +22,7 @@ namespace WindowsFormsApp1
         static public List<Figure> listObject = new List<Figure>();
 
         public delegate void MouseHandler(int x, int y);
-        public delegate void ClickHandler(int x, int y, Color fill, Color pen);
+        public delegate void ClickHandler(int x, int y);
         public static event MouseHandler MouseMoveEvent;
         public static event ClickHandler MouseClickEvent;
 
@@ -58,7 +59,7 @@ namespace WindowsFormsApp1
 
         private void mainCanvas_MouseDown(object sender, MouseEventArgs e)
         {
-            MouseClickEvent(e.X, e.Y, color_fill, color_pen);
+            MouseClickEvent(e.X, e.Y);
             MouseMoveEvent += ReDraw;
         }
 
@@ -104,6 +105,33 @@ namespace WindowsFormsApp1
                     break;
 
             }
+        }
+
+        private void PenBox_CheckedChanged(object sender, EventArgs e)
+        {
+            colorDialog.Color = firstColor;
+            colorDialog.ShowDialog();
+            firstColor = colorDialog.Color;
+            PenBox.BackColor = firstColor;
+        }
+
+        private void BrushBox_CheckedChanged(object sender, EventArgs e)
+        {
+            colorDialog.Color = secondColor;
+            colorDialog.ShowDialog();
+            secondColor = colorDialog.Color;
+            BrushBox.BackColor = secondColor;
+        }
+
+        SizeChanger SizeChanger;
+        private void button1_Click(object sender, EventArgs e)      //Изменить имя
+        {
+            if(SizeChanger != null)
+            {
+                SizeChanger.Close();
+            }
+            SizeChanger = new SizeChanger(1, 40, 1, penSize);
+            SizeChanger.Show();
         }
     }
 }

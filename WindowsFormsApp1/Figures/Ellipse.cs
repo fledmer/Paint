@@ -10,14 +10,14 @@ namespace WindowsFormsApp1
     class Ellipse:Figure
     {
         public override string name => "Circle";
-        public Ellipse(int x, int y, int size_x, int size_y, Color color_fill, Color color_pen)
-            : base(x, y, size_x, size_y, color_fill, color_pen)
+        public Ellipse(int x, int y, int size_x, int size_y)
+            : base(x, y, size_x, size_y)
         { }
 
         public override void Draw(Graphics graphics)
         {
-            graphics.FillEllipse(MainForm.brush, start_x, start_y, size_x, size_y);
-            graphics.DrawEllipse(MainForm.pen, start_x, start_y, size_x, size_y);
+            graphics.FillEllipse(brush, start_x, start_y, size_x, size_y);
+            graphics.DrawEllipse(pen, start_x, start_y, size_x, size_y);
         }
     }
 }
