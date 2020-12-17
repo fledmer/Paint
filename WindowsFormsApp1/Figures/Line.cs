@@ -14,7 +14,7 @@ namespace WindowsFormsApp1
 
         public override string name => "Line";
         public Line(int x, int y, int size_x, int size_y)
-    : base(x, y, size_x, size_y)
+            : base(x, y, size_x, size_y, false)
         { }
 
         public override void SizeChange(int new_x, int new_y, int old_x, int old_y)

@@ -9,21 +9,26 @@ namespace WindowsFormsApp1
 {
     public class Figure
     {
-        protected Brush brush = new SolidBrush(MainForm.secondColor);
-        protected Pen pen = new Pen(MainForm.firstColor, MainForm.penSize);
+        public Brush brush = new SolidBrush(MainForm.secondColor);
+        public Pen pen = new Pen(MainForm.firstColor, MainForm.penSize);
         public int start_x, start_y;
         public int size_x, size_y;
+        public bool isfilled;
 
         public virtual string name { get; } = "Figure";
 
-        protected Figure(int x, int y, int size_x, int size_y)
+        protected Figure(int x, int y, int size_x, int size_y,bool isfilled)
         {
             start_x = x;
             start_y = y;
             this.size_x = size_x;
             this.size_y = size_y;
+            this.isfilled = isfilled;
         }
-
+        virtual public bool RectangleCollision(int start_x, int start_y, int end_x, int end_y)
+        {
+            return false;
+        }
         virtual public void SizeChange(int new_x, int new_y, int old_x, int old_y)
         {
             if (new_x < old_x)

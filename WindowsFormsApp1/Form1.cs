@@ -15,32 +15,25 @@ namespace WindowsFormsApp1
         static public Color firstColor = Color.Black;
         static public Color secondColor = Color.White;
         static public int penSize = 1;
+        static public int fillSwitch = 1;
 
+
+        public static Selector select;
         Graphics graphics;
         Bitmap bitmap;
 
-        static public List<Figure> listObject = new List<Figure>();
-
         public delegate void MouseHandler(int x, int y);
         public delegate void ClickHandler(int x, int y);
+        public delegate void DrawHandler(Graphics graphics);
         public static event MouseHandler MouseMoveEvent;
         public static event ClickHandler MouseClickEvent;
+        public static event DrawHandler ReDrawEvent;
 
-        Color color_fill = Color.Black;
-        Color color_pen = Color.Black;
 
         void ChangePositionBoxText(int x, int y)
         {
             textbox_PositionBoxX.Text = "M.X: " + x;
             textbox_PositionBoxY.Text = "M.Y: " + y;
-        }
-
-        void ReDraw(int x, int y)
-        {
-            graphics.Clear(Color.White);
-            foreach (var Object in listObject)
-                Object.Draw(graphics);
-            mainCanvas.Image = bitmap;
         }
 
         public MainForm()
@@ -49,62 +42,43 @@ namespace WindowsFormsApp1
             bitmap = new Bitmap(mainCanvas.Width, mainCanvas.Height);
             graphics = Graphics.FromImage(bitmap);
             MouseMoveEvent += ChangePositionBoxText;
-            MouseClickEvent += DrawControl.MakeRectangle;
         }
 
         private void mainCanvas_MouseMove(object sender, MouseEventArgs e)
         {
             MouseMoveEvent(e.X, e.Y);
+            if (ReDrawEvent != null)
+            {
+                graphics.Clear(Color.White);
+                ReDrawEvent(graphics);
+                mainCanvas.Image = bitmap;
+
+            }
         }
 
         private void mainCanvas_MouseDown(object sender, MouseEventArgs e)
         {
-            MouseClickEvent(e.X, e.Y);
-            MouseMoveEvent += ReDraw;
+            ReDrawEvent += DrawControl.ReDrawFigure;
+            MouseClickEvent?.Invoke(e.X,e.Y);
+            
         }
 
         private void mainCanvas_MouseUp(object sender, MouseEventArgs e)
         {
             MouseMoveEvent -= DrawControl.ObjectSizeChange;
-            MouseMoveEvent -= ReDraw;
-        }
+            ReDrawEvent -= DrawControl.ReDrawFigure;
 
-
-        private void rectanlToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            MouseClickEvent = DrawControl.MakeRectangle;
-        }
-
-        private void lineToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            MouseClickEvent = DrawControl.MakeLine;
-        }
-
-        private void circleToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            MouseClickEvent = DrawControl.MakeEllipse;
-        }
-
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void figureBox_SelectedValueChanged(object sender, EventArgs e)
-        {
-            switch(figureBox.SelectedIndex)
+            if (select != null)
             {
-                case 0:
-                    MouseClickEvent = DrawControl.MakeLine;
-                    break;
-                case 1:
-                    MouseClickEvent = DrawControl.MakeRectangle;
-                    break;
-                case 2:
-                    MouseClickEvent = DrawControl.MakeEllipse;
-                    break;
-
+                MouseMoveEvent -= select.ChangeSize;
+                graphics.Clear(Color.White);
+                select.MouseUP();
+                select.ReDraw(graphics);
+                DrawControl.ReDrawFigure(graphics);
+                mainCanvas.Image = bitmap;
+                ReDrawEvent -= select.ReDraw;
             }
+            DrawControl.Clear();
         }
 
         private void PenBox_CheckedChanged(object sender, EventArgs e)
@@ -124,14 +98,106 @@ namespace WindowsFormsApp1
         }
 
         SizeChanger SizeChanger;
-        private void button1_Click(object sender, EventArgs e)      //Изменить имя
+        private void PenButton_Click(object sender, EventArgs e) 
         {
             if(SizeChanger != null)
             {
                 SizeChanger.Close();
             }
-            SizeChanger = new SizeChanger(1, 40, 1, penSize);
+            SizeChanger = new SizeChanger(1, 40, 1,penSize,PenButton);
             SizeChanger.Show();
+        }
+
+        private void BrushButton_Click(object sender, EventArgs e)
+        {
+            if (SizeChanger != null)
+            {
+                SizeChanger.Close();
+            }
+            SizeChanger = new SizeChanger(0, 1, 1, fillSwitch, BrushButton);
+            SizeChanger.Show();
+        }
+
+        private void BrushButton_TextChanged(object sender, EventArgs e)
+        {
+            fillSwitch = Convert.ToInt32(BrushButton.Text);
+        }
+
+        private void PenButton_TextChanged(object sender, EventArgs e)
+        {
+            penSize = Convert.ToInt32(PenButton.Text);
+        }
+
+        int FigureBox1ItemCheked = 0;
+        private void FigureBox1_ItemCheck(object sender, ItemCheckEventArgs e)
+        {
+            switch (e.Index)
+            {
+                case 0:
+                    if (!FigureBox1.GetItemChecked(0))
+                    {
+                        MouseClickEvent += DrawControl.MakeRectangle;
+                        FigureBox1ItemCheked++;
+                    }
+                    else
+                    {
+                         MouseClickEvent -= DrawControl.MakeRectangle;
+                        FigureBox1ItemCheked--;
+                    }
+                    break;
+                case 1:
+                    if (!FigureBox1.GetItemChecked(1))
+                    {
+                        MouseClickEvent += DrawControl.MakeEllipse;
+                        FigureBox1ItemCheked++;
+                    }    
+                    else
+                    {
+                        MouseClickEvent -= DrawControl.MakeEllipse;
+                        FigureBox1ItemCheked--;
+                    }
+                    break;
+                case 2:
+                    if (!FigureBox1.GetItemChecked(2))
+                    {
+                        MouseClickEvent += DrawControl.MakeLine;
+                        FigureBox1ItemCheked++;
+                    }
+                    else
+                    {
+                        MouseClickEvent -= DrawControl.MakeLine;
+                        FigureBox1ItemCheked--;
+                    }
+                    break;
+            }
+            if (FigureBox1ItemCheked != 0)
+                ToolBox.Enabled = false;
+            else
+                ToolBox.Enabled = true;
+        }
+        int ToolBoxItemCheked = 0;
+        private void ToolBox_ItemCheck(object sender, ItemCheckEventArgs e)
+        {
+            switch (e.Index)
+            {
+                case 0:
+                    if (!ToolBox.GetItemChecked(0))
+                    {
+                        MouseClickEvent = Selector.CreateSelector;
+                        ToolBoxItemCheked++;
+                    }    
+                    else
+                    {
+                        MouseClickEvent -= Selector.CreateSelector;
+                        Selector.Destroy();
+                        ToolBoxItemCheked--;
+                    }
+                    break;
+            }
+            if (ToolBoxItemCheked != 0)
+                FigureBox1.Enabled = false;
+            else
+                FigureBox1.Enabled = true;
         }
     }
 }
