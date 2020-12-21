@@ -52,6 +52,8 @@ namespace WindowsFormsApp1
             this.FigureBox1 = new System.Windows.Forms.CheckedListBox();
             this.ToolTextBox = new System.Windows.Forms.Label();
             this.ToolBox = new System.Windows.Forms.CheckedListBox();
+            this.button1 = new System.Windows.Forms.Button();
+            this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.backpanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.mainCanvas)).BeginInit();
             this.panel1.SuspendLayout();
@@ -321,11 +323,22 @@ namespace WindowsFormsApp1
             this.ToolBox.TabIndex = 20;
             this.ToolBox.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.ToolBox_ItemCheck);
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(910, 11);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(104, 42);
+            this.button1.TabIndex = 21;
+            this.button1.Text = "Сохранить";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1351, 722);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.ToolBox);
             this.Controls.Add(this.ToolTextBox);
             this.Controls.Add(this.FigureBox1);
@@ -373,6 +386,8 @@ namespace WindowsFormsApp1
         private System.Windows.Forms.CheckedListBox FigureBox1;
         private System.Windows.Forms.Label ToolTextBox;
         private System.Windows.Forms.CheckedListBox ToolBox;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
     }
 }
 

@@ -15,13 +15,6 @@ namespace WindowsFormsApp1
             : base(x, y, size_x, size_y,isfilled)
         { }
 
-        public override bool RectangleCollision(int start_x, int start_y, int end_x, int end_y)
-        {
-            if(this.start_x >= start_x && this.start_y >= start_y &&
-                this.start_x + size_x <= end_x && this.start_y + size_y <= end_y)
-                return true;
-            return false;
-        }
 
         public override void Draw(Graphics graphics)
         {

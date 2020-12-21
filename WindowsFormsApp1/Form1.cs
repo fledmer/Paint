@@ -70,13 +70,11 @@ namespace WindowsFormsApp1
 
             if (select != null)
             {
-                MouseMoveEvent -= select.ChangeSize;
                 graphics.Clear(Color.White);
                 select.MouseUP();
-                select.ReDraw(graphics);
                 DrawControl.ReDrawFigure(graphics);
+                select.ReDraw(graphics);
                 mainCanvas.Image = bitmap;
-                ReDrawEvent -= select.ReDraw;
             }
             DrawControl.Clear();
         }
@@ -198,6 +196,18 @@ namespace WindowsFormsApp1
                 FigureBox1.Enabled = false;
             else
                 FigureBox1.Enabled = true;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            DialogResult result = folderBrowserDialog1.ShowDialog();
+
+            if (result == DialogResult.OK)
+            {
+                // запишем в нашу переменную путь к папке
+                bitmap.Save(folderBrowserDialog1.SelectedPath + "\\picture.png");
+                bitmap.Save("picture.png");
+            }
         }
     }
 }
